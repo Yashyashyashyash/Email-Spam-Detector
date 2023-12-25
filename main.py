@@ -1,49 +1,5 @@
 import streamlit as st
 
-import numpy as np
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-
-# Function to preprocess the text
-def preprocess_text(text):
-    # Add your preprocessing steps here
-    return text
-
-# Load your data or CSV file
-@st.cache
-def load_data():
-    df = pd.read_csv('mail_data.csv')  # Replace with your CSV file
-    return df
-
-# Function to train the model
-def train_model(df):
-    # Preprocess data
-    data = df.where((pd.notnull(df)), '')
-    data.info()
-    data.loc[data['Category'] == 'spam', 'Category'] = 0
-    data.loc[data['Category'] == 'ham', 'Category'] = 1
-
-    X = data['Message']
-    y = data['Category']
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=3)
-
-    # Feature extraction
-    feature_extraction = TfidfVectorizer(min_df=1, stop_words='english', lowercase=True)
-    X_train_feature = feature_extraction.fit_transform(X_train)
-    X_test_feature = feature_extraction.transform(X_test)
-
-    y_train = y_train.astype('int')
-    y_test = y_test.astype('int')
-
-    # Model training
-    model = LogisticRegression()
-    model.fit(X_train_feature, y_train)
-
-    return model, feature_extraction
 
 # Main function to run the Streamlit app
 def main():
